@@ -9,8 +9,8 @@ corriente_mA = data['ma']
 voltaje = data['voltage']        
 
 corriente_A = corriente_mA / 1000
-a, b = np.polyfit(corriente_A, voltaje, 1)  # a ≈ resistencia
-error_y = 0.07  # V
+a, b = np.polyfit(corriente_A, voltaje, 1)
+error_y = 0.07
 I_fit = np.linspace(min(corriente_A), max(corriente_A), 100)
 V_fit = a * I_fit + b
 
@@ -23,6 +23,7 @@ plt.title('Validación de la Ley de Ohm - Resistencia Serie Naranja')
 plt.legend()
 plt.grid(True)
 plt.tight_layout()
+plt.savefig("grafico_ley_ohm.png")
 plt.show()
 
 R_ajustada = a  
@@ -46,4 +47,5 @@ ax.set_title('Comparación de métodos de medición de resistencia')
 
 plt.tight_layout()
 plt.grid(True, linestyle='--', alpha=0.6)
+plt.savefig("grafico_comparacion_resistencias.png")
 plt.show()

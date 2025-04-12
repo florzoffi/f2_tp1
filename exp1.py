@@ -22,6 +22,7 @@ plt.title('Voltaje medido vs Voltaje fuente')
 plt.legend()
 plt.grid(True)
 plt.tight_layout()
+plt.savefig("grafico_fuente_vs_multimetro.png")
 plt.show()
 
 print(f"Pendiente (a): {a:.3f}")

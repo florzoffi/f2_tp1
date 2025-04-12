@@ -18,4 +18,5 @@ ax.set_title('Medición individual de resistencias (multímetro)')
 
 plt.grid(True, linestyle='--', alpha=0.6)
 plt.tight_layout()
+plt.savefig("grafico_resistencias_individuales.png") 
 plt.show()

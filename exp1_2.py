@@ -23,6 +23,7 @@ plt.title('Validación de la Ley de Ohm - Resistencia Serie Roja')
 plt.legend()
 plt.grid(True)
 plt.tight_layout()
+plt.savefig("grafico_ley_ohm_rojo.png")
 plt.show()
 
 R_ajustada = a 
@@ -47,4 +48,5 @@ ax.set_title('Comparación de métodos de medición de resistencia')
 
 plt.tight_layout()
 plt.grid(True, linestyle='--', alpha=0.6)
+plt.savefig("grafico_comparacion_resistencias_rojo.png") 
 plt.show()
