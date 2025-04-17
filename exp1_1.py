@@ -32,7 +32,7 @@ R_colorimetria = 10000
 
 error_colorimetrico = R_colorimetria * 0.05 
 error_abs = abs(R_ajustada - R_multimetro)
-labels = ['Colorimetría', 'Multímetro', 'Ajuste lineal']
+labels = ['Valor Nominal', 'Multímetro', 'Ajuste lineal']
 resistencias = [R_colorimetria, R_multimetro, R_ajustada]
 errores = [error_colorimetrico, 6, error_abs] 
 x_pos = np.arange(len(labels))
