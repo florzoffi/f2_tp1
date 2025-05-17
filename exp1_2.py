@@ -2,40 +2,38 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-data = pd.read_csv( 'serie_rojo.csv' )
+# Leer datos
+data = pd.read_csv('serie_rojo.csv')
 data.columns = [col.strip().lower().replace(" ", "_") for col in data.columns]
 
-corriente_mA = data['ma']        
-voltaje = data['voltage']        
+# Extraer variables
+corriente_mA = data['ma']
+voltaje = data['voltage']
 corriente_A = corriente_mA / 1000
 
-a, b = np.polyfit(corriente_A, voltaje, 1) 
-error_y = 0.07  
-I_fit = np.linspace(min(corriente_A), max(corriente_A), 100)
-V_fit = a * I_fit + b
+# Ajuste lineal
+a, b = np.polyfit(corriente_A, voltaje, 1)
+R_ajustada = a
+R_multimetro = 980
+R_colorimetria = 1000
 
-plt.figure(figsize=(8, 6))
-plt.errorbar(corriente_A, voltaje, yerr=error_y, fmt='o', capsize=4, label='Datos experimentales')
-plt.plot(I_fit, V_fit, '-', label=f'Ajuste lineal: V = {a:.2f}·I + {b:.2f}')
-plt.xlabel('Corriente [A]')
-plt.ylabel('Voltaje [V]')
-plt.title('Validación de la Ley de Ohm - Resistencia Serie Roja')
-plt.legend()
-plt.grid(True)
-plt.tight_layout()
-plt.savefig("grafico_ley_ohm_rojo.png")
-plt.show()
+# Errores instrumentales para el ajuste lineal
+V_mean = np.mean(voltaje)
+I_mean = np.mean(corriente_A)
 
-R_ajustada = a 
-R_multimetro = 980 
-R_colorimetria = 1000 
+delta_V = np.sqrt((0.005 * V_mean + 0.02)**2 + (0.005 * V_mean + 0.01)**2)  # multímetro + fuente
+delta_I = 0.01 * I_mean + 0.00002  # multímetro (1% + 0.02 mA → en A)
+rel_error_R = np.sqrt((delta_V / V_mean)**2 + (delta_I / I_mean)**2)
+error_ajuste = R_ajustada * rel_error_R
 
-error_colorimetrico = R_colorimetria * 0.05 
-error_abs = abs(R_ajustada - R_multimetro)
+# Otros errores
+error_colorimetrico = R_colorimetria * 0.05
+error_multimetro = 6
 
+# Armado de gráfico
 labels = ['Valor Nominal', 'Multímetro', 'Ajuste lineal']
 resistencias = [R_colorimetria, R_multimetro, R_ajustada]
-errores = [error_colorimetrico, 6, error_abs] 
+errores = [error_colorimetrico, error_multimetro, error_ajuste]
 x_pos = np.arange(len(labels))
 
 fig, ax = plt.subplots(figsize=(8, 6))
@@ -44,9 +42,7 @@ ax.errorbar(x_pos, resistencias, yerr=errores, fmt='o', capsize=10,
 ax.set_xticks(x_pos)
 ax.set_xticklabels(labels)
 ax.set_ylabel('Resistencia [Ω]')
-ax.set_title('Comparación de métodos de medición de resistencia')
-
 plt.tight_layout()
 plt.grid(True, linestyle='--', alpha=0.6)
-plt.savefig("grafico_comparacion_resistencias_rojo.png") 
+plt.savefig("grafico_comparacion_resistencias_rojo.png")
 plt.show()

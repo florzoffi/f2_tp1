@@ -11,7 +11,7 @@ y = data['voltaje_multimetro']
 a, b = np.polyfit(x, y, 1)
 x_fit = np.linspace(min(x), max(x), 100)
 y_fit = a * x_fit + b
-error_sist_voltimetro = round(abs(b) + 0.01, 3) 
+error_sist_voltimetro = (0.005 * y) + 0.02
 
 plt.figure(figsize=(8, 6))
 plt.errorbar(x, y, yerr=error_sist_voltimetro, fmt='o', capsize=4, label='Datos experimentales ± error')
@@ -27,4 +27,4 @@ plt.show()
 
 print(f"Pendiente (a): {a:.3f}")
 print(f"Offset (b): {b:.3f}")
-print(f"Error sistemático sugerido para barras de error en voltaje: ±{error_sist_voltimetro:.3f} V")
+print(f"Ejemplo de barra de error (primer punto): ±{error_sist_voltimetro.iloc[0]:.3f} V")

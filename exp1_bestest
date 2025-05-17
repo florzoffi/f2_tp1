@@ -32,21 +32,30 @@ V_fit_n = a_n * I_fit_n + b_n
 fig, axs = plt.subplots(2, 1, figsize=(10, 10), sharex=True,
                        gridspec_kw={'height_ratios': [3, 1]})
 
+error_multimetro_roja = 0.005 * V_roja + 0.02
+error_fuente_roja = 0.005 * V_roja + 0.01
+error_extra_roja = 0.3
+error_roja = np.sqrt(error_multimetro_roja**2 + error_fuente_roja**2 + error_extra_roja**2)
+
+error_multimetro_naranja = 0.005 * V_naranja + 0.02
+error_fuente_naranja = 0.005 * V_naranja + 0.01
+error_extra_naranja = 0.2
+error_naranja = np.sqrt(error_multimetro_naranja**2 + error_fuente_naranja**2 + error_extra_naranja**2)
+
 # Gráfico superior: V vs I
-axs[0].errorbar(I_roja, V_roja, yerr=0.07, fmt='o', capsize=4, color='red')
+axs[0].errorbar(I_roja, V_roja, yerr=error_roja, fmt='o', capsize=4, color='red')
 axs[0].plot(I_fit_r, V_fit_r, '-', color='darkred', label=f'Ajuste: V = {a_r:.2f}·I + {b_r:.2f}')
 
-axs[0].errorbar(I_naranja, V_naranja, yerr=0.07, fmt='s', capsize=4, color='orange')
+axs[0].errorbar(I_naranja, V_naranja, yerr=error_naranja, fmt='o', capsize=4, color='orange')
 axs[0].plot(I_fit_n, V_fit_n, '-', color='darkorange', label=f'Ajuste: V = {a_n:.2f}·I + {b_n:.2f}')
 
 axs[0].set_ylabel('Voltaje [V]')
-axs[0].set_title('Comparación de Ley de Ohm: Resistencia Roja vs Naranja')
 axs[0].legend()
 axs[0].grid(True)
 
 # Gráfico inferior: residuos
-residuos_rojo = (V_roja - (a_r * I_roja + b_r)) / 0.07
-residuos_naranja = (V_naranja - (a_n * I_naranja + b_n)) / 0.07
+residuos_rojo = (V_roja - (a_r * I_roja + b_r)) / error_roja
+residuos_naranja = (V_naranja - (a_n * I_naranja + b_n)) / error_naranja
 
 axs[1].axhline(0, color='gray', linestyle='--')
 axs[1].scatter(I_roja, residuos_rojo, color='red')
